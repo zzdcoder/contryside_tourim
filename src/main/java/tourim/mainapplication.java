@@ -16,6 +16,7 @@ public class mainapplication {
     public static void main(String[] args) {
         SpringApplication.run(mainapplication.class, args);
         System.out.println("hot-fix");
+        System.out.println("master-test");
     }
 
 }
