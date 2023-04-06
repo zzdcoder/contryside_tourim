@@ -17,6 +17,7 @@ public class mainapplication {
         SpringApplication.run(mainapplication.class, args);
         System.out.println("hot-fix");
         System.out.println("master-test");
+        System.out.println("hot-fix test");
     }
 
 }
