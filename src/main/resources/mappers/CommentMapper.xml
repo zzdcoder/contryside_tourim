@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="tourim.contryside.pojo.Comment">
+            <id property="coId" column="co_id" jdbcType="INTEGER"/>
+            <result property="jdId" column="jd_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="coTime" column="co_time" jdbcType="VARCHAR"/>
+            <result property="coContent" column="co_content" jdbcType="VARCHAR"/>
+            <result property="coType" column="co_type" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        co_id,jd_id,user_id,
+        co_time,co_content,co_type
+    </sql>
+    <select id="getAllCommentByJdidAndType" resultType="tourim.contryside.vo.User_Comment">
+        select u.*,com.* from user u ,comment com where u.user_id=com.user_id and com.jd_id=#{jdid} and com.co_type=#{type}
+    </select>
+    <select id="getAllCommentByFidAndType" resultType="tourim.contryside.vo.User_Comment">
+        select u.*,com.* from user u ,comment com where u.user_id=com.user_id and com.fw_id=#{fid} and com.co_type=#{type}
+    </select>
+    <select id="getAllCommentByGidAndType" resultType="tourim.contryside.vo.User_Comment">
+       select u.*,com.* from user u ,comment com where u.user_id=com.user_id and com.g_id=#{gid} and com.co_type=#{type}
+    </select>
+</mapper>

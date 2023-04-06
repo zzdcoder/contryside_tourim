@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <title>房屋订单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+    <script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+    <!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/user.css">
+</head>
+<body>
+
+<!-------------------版头------------------->
+<div id="header">
+    <div class="cw1000">
+        <!-------------------logo------------------->
+        <!-------------------头部导航------------------->
+        <div class="head_title">
+            房屋订单
+        </div>
+        <!-------------------用户------------------->
+        <div class="user">
+            <a class="user-hd" href="#">
+                <img th:src="${session.userheader}"/><span style="position: relative;top: 10px"  th:text="${session.username}"></span>
+                <div class="clear"></div>
+            </a>
+            <div class="user-bd">
+                <div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+                <ul class="nav_sort">
+                    <li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+                    <li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+                    <li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+                    <li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+                    <li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+                    <li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+                    <li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+                    <li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+                    <li><a href="#"><i class="i8"></i>退出</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<!-----------------提交订单---------------->
+<div id="submit_orders">
+    <div class="cw1000">
+        <div class="main_title">
+            <ul>
+                <li style="width:35%;">房屋信息</li>
+                <li style="width:15%;">单价</li>
+                <li style="width:30%;">月</li>
+                <li style="width:20%;">总价</li>
+            </ul>
+        </div>
+        <div class="list_box">
+            <ul>
+                <li>
+                    <div class="con">
+                        <div class="info" style="width:35%;">
+                            <div class="pic"><a href="#"><img width=53 height=53 th:src="${huzuinfo.hzBannerimg}"/></a></div>
+                            <div class="name">
+                                <a id="name" href="#" th:text="${huzuinfo.hzBanner}"></a>
+                                <p>{{getcurrent}}</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="price" style="width:15%;"><label id="price" th:text="'￥'+${fangwuimg.fwPrice}"></label></div>
+                        <div class="number" style="width:30%;">
+                            <div class="Spinner">
+                                <a @click="reduce" class="DisDe" href="javascript:void(0)"><i>-</i></a>
+                                <input class="Amount" v-model="month_num" autocomplete="off" maxlength="3">
+                                <a @click="add" class="Increase" href="javascript:void(0)"><i>+</i></a>
+                            </div>
+                        </div>
+
+                        <div class="price" style="width:20%;"><span>￥{{computprice}}</span></div>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+        <!-----------------景区信息---------------->
+        <div class="info_mo">
+            <table>
+                <tr>
+                    <th colspan="2">房主信息</th>
+                </tr>
+                <tr>
+                    <td id="huzuname" th:text="'房主名称：'+${huzuinfo.hzName}"></td>
+                    <td th:text="'联系方式：'+${huzuinfo.hzTelephone}"></td>
+                </tr>
+            </table>
+        </div>
+        <!-----------------活动信息---------------->
+        <div class="info_mo">
+            <table>
+                <tr>
+                    <th colspan="2">活动信息</th>
+                </tr>
+                <tr th:each="huodong:${houdong.huodongEntities}">
+                    <td th:text="'活动名称：'+${huodong.hdIntro}"></td>
+                    <td ><img th:src="${huodong.hdPicture}" style="height: 60px;width: 100px"/></td>
+                </tr>
+            </table>
+        </div>
+        <div class="contact">
+            <ul>
+                <li class="title">
+                    <h2><i class="am-icon-user"></i> 联系人信息</h2>
+                    <a href="#" class="add_book" data-am-modal="{target: '#my-popup'}">选择已有联系人</a>
+                    <div class="am-popup" id="my-popup">
+                        <div class="am-popup-inner">
+                            <div class="am-popup-hd">
+                                <h4 class="am-popup-title">联系人列表</h4>
+                                <span data-am-modal-close
+                                      class="am-close">&times;</span>
+                            </div>
+                            <div class="am-popup-bd">
+                                <ul>
+                                    <li><i class="am-icon-user"></i><span class="name">张飞</span>17670362580
+                                        <label class="am-radio-inline">
+                                            <input type="radio" name="radio3" value="" data-am-ucheck>
+                                        </label>
+                                    </li>
+                                    <li><i class="am-icon-user"></i><span class="name">张飞</span>17670362580
+                                        <label class="am-radio-inline">
+                                            <input type="radio" name="radio3" value="" data-am-ucheck>
+                                        </label>
+                                    </li>
+                                    <li><i class="am-icon-user"></i><span class="name">张飞</span>17670362580
+                                        <label class="am-radio-inline">
+                                            <input type="radio" name="radio3" value="" data-am-ucheck>
+                                        </label>
+                                    </li>
+
+                                </ul>
+                                <input class="submit" type="submit" value="确定"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </li>
+                <li>
+                    <span class="name">姓名：</span>
+                    <input type="text" v-model="contact_name" class="text" placeholder="请填写真实姓名">
+                    <div class="radio_box">
+                        <label class="am-radio-inline">
+                            <input type="radio" name="radio1" value="" data-am-ucheck>
+                            男士
+                        </label>
+                        <label class="am-radio-inline">
+                            <input type="radio"  name="radio1" value="" data-am-ucheck checked>
+                            女士
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <span class="name">手机：</span>
+                    <input type="text"  v-model="contact_phone" class="text" placeholder="请填写手机号">
+                    <p>（消费时所需的兑换码会发送至您的手机，请您保持手机畅通）</p>
+                </li>
+            </ul>
+
+        </div>
+        <div class="tip">
+            <h2>供应商信息</h2>
+            <p>本产品由遵义旅游或其关联公司旅行社及具有资质的合作旅行社提供相关服务</p>
+        </div>
+        <div class="calculation">
+            <a @click="submit_order()" href="#">立即结算</a>
+            <span>合计（含人工费0.00元）： <b>￥{{computprice}}</b></span>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<!-----------------版底---------------->
+<div id="footer">
+    <p>遵义文化旅游发展有限公司 版权所有</p>
+    <p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：周遵大</p>
+</div>
+<script >
+    new Vue({
+        el:"#submit_orders",
+        data:{
+            total_price:0,
+            month_num:1,
+            price:0,
+            contact_name:"",
+            contact_phone:"",
+            huzu_name:"",
+            order_time:"",
+        },
+        methods:{
+            add(){
+                this.month_num++
+            },
+            reduce(){
+                if (this.month_num>1){
+                    this.month_num--
+                }
+            },
+            getinnerHtml(){
+                   var huzu = document.getElementById("huzuname").innerHTML;
+                   var sprice = document.getElementById("price").innerHTML;
+                   var newprice = sprice.substring(1,sprice.length);
+                   this.price=parseInt(newprice)
+                   var strings = huzu.split("：");
+                   this.huzu_name=strings[1];
+            },
+            submit_order(){
+                if (this.contact_phone==""||this.contact_name==""){
+                    if (confirm("联系人和联系号码不能为空!!")){
+                         window.location.href="#javascript(0)"
+                    }else {
+                        window.location.href="#javascript(0)"
+                    }
+                }
+                else {
+                    if (confirm("确定结算？？")){
+                        document.write("<form action=/save_houseo method=post name=form style='display:none'>");
+                        document.write("<input type=hidden name=contactName value='"+this.contact_name+"'>");
+                        document.write("<input type=hidden name=contactPhone value='"+this.contact_phone+"'>");
+                        document.write("<input type=hidden name=huzuName value='"+this.huzu_name+"'>");
+                        document.write("<input type=hidden name=orderTime value='"+this.order_time+"'>");
+                        document.write("<input type=hidden name=totalPrice value='"+this.total_price+"'>");
+                        document.write("<input type=hidden name=monthNum value='"+this.month_num+"'>");
+                        document.write("</form>");
+                        document.form.submit()  //提交表单
+                    }
+                }
+            },
+        },
+        created(){
+            this.getinnerHtml()
+        },
+        computed:{
+            //获取当前时间
+            getcurrent(){
+                let time=new Date()
+                var localtime = time.toLocaleString()
+                this.order_time=localtime
+                return localtime
+            },
+            //计算总价
+            computprice(){
+                var total= this.month_num * this.price;
+                this.total_price=total
+                return total
+            }
+        }
+    })
+</script>
+</body>
+</html>

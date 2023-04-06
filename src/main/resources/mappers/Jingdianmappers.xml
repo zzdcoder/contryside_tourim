@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.Jingdianmappers">
+    <update id="updateByJingDianName">
+        update from jingdian set contact_name=#{contactName},contact_phone=#{contactPhone} where jd_name=#{jdName}
+    </update>
+    <select id="getallscenic" resultType="tourim.contryside.pojo.JingdianEntity">
+        select * from jingdian
+    </select>
+    <select id="getJingDianByName" resultType="tourim.contryside.pojo.JingdianEntity">
+        select * from jingdian where jd_name=#{name}
+    </select>
+</mapper>

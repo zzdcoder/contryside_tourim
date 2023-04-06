@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.ShopCartmappers">
+    <update id="updateCartByUidAndSpid">
+        update shop_cart set sp_num=sp_num+#{spNum},order_time=#{orderTime},total_price=total_price+#{totalPrice}
+        where user_id=#{userId} and sp_id=#{spId}
+    </update>
+    <delete id="deleteOneByspid">
+        delete from shop_cart where sp_id=#{id}
+    </delete>
+
+    <select id="getShopByUidAndSpid" resultType="tourim.contryside.pojo.ShopCartEntity">
+        select * from shop_cart where user_id=#{uid} and sp_id=#{spid}
+    </select>
+    <select id="getShopByUid" resultType="tourim.contryside.pojo.ShopCartEntity">
+        select * from shop_cart where user_id=#{uid}
+    </select>
+    <select id="getAllCartByUid" resultType="tourim.contryside.vo.shopcart_shangpin">
+        select cart.*,sp.* from shop_cart cart,shangpin sp where cart.sp_id=sp.sp_id
+    </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.Fangwumappers">
+    <resultMap id="fw_fwimg" type="fangwuEntity">
+        <id property="fwId" column="fw_id"></id>
+        <result property="hzId" column="hz_id"></result>
+        <result property="fwIntro" column="fw_intro"></result>
+        <result property="fwLoction" column="fw_loction"></result>
+        <result property="fwPrice" column="fw_price"></result>
+        <result property="publishTime" column="publish_time"></result>
+        <collection property="fangwuimgs" ofType="fangwuimg">
+            <id property="imgId" column="img_id"></id>
+            <result property="fwId" column="fw_id"></result>
+            <result property="imgPath" column="img_path"></result>
+        </collection>
+    </resultMap>
+    <select id="getFangwuImgById" resultMap="fw_fwimg">
+        select fw.*,fimg.* from fangwu fw,fangwuimg fimg where fw.fw_id=fimg.fw_id and fw.fw_id=#{fw_id}
+    </select>
+
+    <resultMap id="fw_huodong" type="fangwuEntity">
+        <id property="fwId" column="fw_id"></id>
+        <result property="hzId" column="hz_id"></result>
+        <result property="fwIntro" column="fw_intro"></result>
+        <result property="fwLoction" column="fw_loction"></result>
+        <result property="fwPrice" column="fw_price"></result>
+        <result property="publishTime" column="publish_time"></result>
+        <collection property="huodongEntities" ofType="huodongEntity">
+           <id property="hdId" column="hd_id"></id>
+            <result property="hdIntro" column="hd_intro"></result>
+            <result property="hdPicture" column="hd_picture"></result>
+            <result property="fwId" column="fw_id"></result>
+        </collection>
+    </resultMap>
+    <select id="getFangWuHuodongById" resultMap="fw_huodong">
+            select fw.*,a.* from fangwu fw,huodong a where fw.fw_id=a.fw_id and fw.fw_id=#{fw_id}
+    </select>
+</mapper>

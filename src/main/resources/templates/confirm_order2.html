@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <title>确认订单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+  	<script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+	<!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <link rel="stylesheet" type="text/css" href="../static/css/user.css">
+	<script type="text/javascript" src="../static/js/vue.js"></script>
+	<script type="text/javascript" src="../static/js/axios.min.js"></script>
+	<script src="../static/plugins/elementui/index.js"></script>
+</head>
+<body>
+<!-------------------版头------------------->
+<div id="header">
+	<div class="cw1000">
+		<!-------------------logo------------------->
+		<!-------------------头部导航------------------->
+		<div class="head_title">
+			确认订单
+		</div>
+		<!-------------------用户------------------->
+		<div class="user">
+			<a class="user-hd" href="#">
+				<img th:src="${session.userheader}"/><span style="position: relative;top: 10px"  th:text="${session.username}"></span>
+				<div class="clear"></div>
+			</a>
+			<div class="user-bd">
+				<div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+				<ul class="nav_sort">
+					<li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+					<li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+					<li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+					<li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+					<li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+					<li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+					<li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+					<li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+					<li><a href="#"><i class="i8"></i>退出</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<!-----------------确认订单---------------->
+<div id="confirm_order">
+	<div class="cw1000">	
+
+		
+
+		<!-----------------景区信息---------------->
+		<div class="info_mo">
+			<table>
+				<tr>
+					<th class="cwt">商品信息</th>
+					<th class="cwt">单价</th>
+					<th class="cwt">数量</th>
+					<th class="cwt">总价</th>
+				</tr>
+				<tr>
+					<td><span><img class="pic" width=53 height=53 th:src="${order.jdPicture}" /></span><a href="#" th:text="${order.jdName}" ></a></td>
+					<td class="cwt" th:text="'￥'+${order.jdPrice}" >￥80.9</td>
+					<td class="cwt" th:text="${order.jdNum}" >x3</td>
+					<td class="cwt" th:text="'￥'+${order.totalPrice}" >￥242</td>
+				</tr>
+			</table>
+		</div>
+		<!-----------------景区信息---------------->
+		<div class="info_mo">
+			<table>
+				<tr>
+					<th colspan="2">景区信息</th>
+				</tr>
+				<tr>
+					<td th:text="'景区名称：'+${order.jdName}">景区名称：千唐志斋</td>
+					<td th:text="'联系方式：'+${order.jdTelephone}">联系方式：0379-65517799</td>
+				</tr>
+				<tr>
+					<td th:text="'开放时间：'+${order.jdTime}">开放时间：全年</td>
+					<td th:text="'详细地址：'+${order.jdLocation}">详细地址：洛阳市孟津县马屯镇</td>
+				</tr>
+			</table>
+		</div>
+		<!-----------------活动信息---------------->
+		<div class="info_mo">
+			<table>
+				<tr>
+					<th colspan="2">活动信息</th>
+				</tr>
+				<tr>
+					<td th:text="'活动：'+${order.activites}">活动：春节逛吃哪里去？看洛阳庙会、灯展集锦</td>
+					<td th:text="'活动咨询：'+${order.advicePhone}">活动咨询：0379-63789053</td>
+				</tr>
+				<tr>
+					<td th:text="'出发时间：'+${order.goTime}">出发时间：2017/01/23</td>
+					<td th:text="'集合地点：'+${order.assemLoc}">集合地点：洛阳市关林庙会</td>
+				</tr>
+			</table>
+		</div>
+			
+		<!-----------------景区信息---------------->
+		<div class="info_mo">
+			<table>
+				<tr>
+					<th colspan="2">联系人信息</th>
+				</tr>
+				<tr>
+					<td th:text="'报名人：'+${order.contName}">报名人：袁旭</td>
+					<td th:text="'手机号：'+${order.contPhone}">手机号：15896677331</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="pay_method">
+			<h2>支付方式</h2>
+			<ul>
+				<li><a class="cur" href="#">支付宝支付</a><span>← 选择支付宝支付商品金额</span></li>
+				<li><a href="#">微信支付</a><span>← 选择微信钱包支付商品金额</span></li>
+			</ul>
+		</div>
+
+		<div class="calculation">
+
+			<input id="count" type="button" href="#" value="结算" onclick="myconfirm()"/>
+			<span>应付金额： <b id="totalmoney" th:text="'￥'+${order.totalPrice}">￥200.0</b></span>
+			
+		</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+<!-----------------版底---------------->
+<div id="footer">
+	<p>Zhiqi文化旅游发展有限公司 版权所有</p>
+	<p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：周遵大</p>
+</div>
+<script >
+	function myconfirm() {
+		if (window.confirm("确定支付?")){
+			window.location.href="http://localhost:8088"
+		}
+	}
+</script>
+</body>
+</html>

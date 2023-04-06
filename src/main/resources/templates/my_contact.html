@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <title>常用联系人</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+  	<script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+	<!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <link rel="stylesheet" type="text/css" href="../static/css/user.css">
+	<script  src="../static/js/vue.js"></script>
+	<script  src="../static/js/axios.min.js"></script>
+</head>
+<body>
+<!-------------------版头------------------->
+<div id="header">
+    <div class="cw1000">
+        <!-------------------logo------------------->
+		<!-------------------导航------------------->
+		<div class="nav" style="position: relative;left: 180px">
+			<ul>
+				<li><a title=""  th:href="@{/}">首页</a><span>|</span></li>
+				<li><a class="tta" title="" th:href="@{/tourim(pagenum=1)}">遵义旅游</a><span>|</span></li>
+				<li><a title="" th:href="@{/foodshop(pagenum=1)}">特产商城</a><span>|</span></li>
+				<li><a title="" th:href="@{/contryside(pagenum=1)}">乡村体验</a><span>|</span></li>
+				<li><a title="" th:href="@{/news}">新闻资讯</a><span>|</span></li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-------------------用户------------------->
+		<div class="user">
+			<a class="user-hd" href="#">
+				<img th:src="${session.userheader}"/><span style="position: relative;top: 10px"  th:text="${session.username}"></span>
+				<div class="clear"></div>
+			</a>
+			<div class="user-bd">
+				<div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+				<ul class="nav_sort">
+					<li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+					<li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+					<li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+					<li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+					<li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+					<li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+					<li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+					<li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+					<li><a href="#"><i class="i8"></i>退出</a></li>
+				</ul>
+			</div>
+		</div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-----------------用户banner---------------->
+<div id="user_banner">
+	<div class="pic">
+		<a href="/gotomyhead">
+			<img th:src="${session.userheader}"/>
+			<div>更换头像</div>
+		</a>
+	</div>
+	<div class="con">
+		<h2 th:text="${session.username}"></h2>
+		<p th:text="${session.useridiograph}">还没有签名哦</p>
+	</div>
+</div>
+<!-----------------快捷导航---------------->
+<div id="quick_nav">
+	<a href="my_index.html"><span class="ico1"><img src="../static/images/nav_ico1.png"/></span>个人主页</a>
+	<a href="write_note.html"><span class="ico2"><img src="../static/images/nav_ico2.png"/></span>发布游记</a>
+	<a href="my_note.html"><span class="ico7"><img src="../static/images/nav_ico7.png"/></span>我的游记</a>
+	<a href="collection_list.html"><span class="ico3"><img src="../static/images/nav_ico3.png"/></span>我的收藏</a>
+	<a href="project_order.html"><span class="ico4"><img src="../static/images/nav_ico4.png"/></span>商品订单</a>
+	<a href="scenic_order.html"><span class="ico5"><img src="../static/images/nav_ico5.png"/></span>旅游订单</a>
+	<a href="note_comments.html"><span class="ico6"><img src="../static/images/nav_ico6.png"/></span>我的评论</a>
+</div>
+<!-----------------框架---------------->
+<div class="cw1000">
+	<div class="w280 fl">
+		<div class="public_box">
+			<!-----------------设置导航---------------->
+			<div id="set_nav">
+				<ul>
+					<li><a href="/gotomyinfo"><i class="ico1"></i>我的信息</a></li>
+					<li><a href="/gotomyhead"><i class="ico2"></i>我的头像</a></li>
+					<li><a class="cur" href="/add_address"><i class="ico3"></i>常用联系人</a></li>
+					<li><a href="/modifypass"><i class="ico4"></i>修改密码</a></li>
+				</ul>
+			</div>
+		</div>	
+	</div>
+
+	<div class="w700 fr">
+		<div class="public_box">
+			<!-----------------常用联系人---------------->
+			<div id="set_box">
+				<div class="title"><h2>常用联系人</h2></div>
+				<div style="position: relative;left: 100px">
+					<div class="city">
+						<select style="opacity: 0.5" name="province" id="province">
+							<option  value="省份/自治区">省份/自治区</option>
+						</select>
+						<select style="opacity: 0.5" name="city" id="city">
+							<option value="城市/地区">城市/地区</option>
+						</select>
+						<select  style="opacity: 0.5" id="country" name="country">
+							<option value="区/县" >区/县</option>
+						</select>
+					</div>
+			    </div>
+				<table class="table_list">
+					<tr>
+						<th>详细地址：</th>
+						<td><textarea id="detail_addre"></textarea></td>
+					</tr>
+					<tr>
+						<th>姓名：</th>
+						<td><input v-model="receiver_name" class="text" type="text" /></td>
+					</tr>
+					<tr>
+						<th>手机号码：</th>
+						<td><input  v-model="phone" class="text" type="text" /></td>
+					</tr>
+					<tr>
+						<th>邮政编码：</th>
+						<td><input v-model="post_code" class="text" type="text" /></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label class="am-checkbox">
+								<input type="checkbox" id="checkbox_a1" class="chk_1" /> 
+								<label for="checkbox_a1"></label> 设置为默认
+							</label>
+						</td>
+					</tr>
+				</table>
+				<div class="operation"><input type="submit" class="save" @click="submitaddress" value="保存" /></div>
+				<!-----------------联系列表---------------->
+			</div>
+		</div>	
+	</div>
+	<div class="clear"></div>
+</div>
+<!-----------------版底---------------->
+<div id="footer">
+	<p>遵义文化旅游发展有限公司 版权所有</p>
+	<p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：周遵大</p>
+</div>
+<script type="text/javascript" charset="UTF-8"  src="../static/js/city1.js"></script>
+<script type="text/javascript" charset="UTF-8"  src="../static/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" charset="UTF-8"  src="../static/js/jquery-1.12.4.min.js"></script>
+<script>
+	new Vue({
+		el:"#set_box",
+		data:{
+			receiver_name:"",
+			phone:"",
+			post_code:"",
+		},
+		methods:{
+			submitaddress(){
+				//通jquery的方式或select中的值
+				var provinceoption = $("#province option:selected");
+				var cityoption = $("#city option:selected");
+				var countryoption = $("#country option:selected");
+
+				var provalue = provinceoption.html();
+				var cityvalue = cityoption.html();
+				var countryvalue = countryoption.html();
+
+				//获取文本框里的内容
+				var detailAddre = $("#detail_addre").html();
+
+				var address
+				if (countryvalue!=null&&countryvalue!=""){
+					address=provalue+"省"+" "+cityvalue+"市"+" "+countryvalue+"区"+" "+detailAddre
+				}
+				else {
+					address=provalue+"省"+" "+cityvalue+"市"+" "+detailAddre
+				}
+                console.log(address)
+				// console.log(option.val())  //拿到选中项的值
+				// console.log(option.text())   //拿到选中项的文本
+
+				/*//原生的js方式
+				var province = document.getElementById("province")
+				var index = province.selectedIndex; //拿到选中项的下标
+				var value = province.options[index].value; //拿到选中项的值
+				var text = province.options[index].text; //拿到选中项的文本
+				console.log(value)
+				console.log(text)*/
+				document.write("<form action='/back_pay' method='post' name='form' style='display: none'>");
+				document.write("<input type='hidden' name='postCode' value='"+this.post_code+"'>");
+				document.write("<input type='hidden' name='phoneNum' value='"+this.phone+"'>");
+				document.write("<input type='hidden' name='gotName' value='"+this.receiver_name+"'>");
+				document.write("<input type='hidden' name='addre' value='"+address+"'>");
+				document.form.submit();
+			}
+		}
+
+	})
+	var allCity = city.citylist;
+	$.each(allCity,function(i,n){
+		//添加每一个省
+		$("#province").append('<option value="'+ n.p +'">' + n.p + '</option>');
+	});
+
+
+	$("#province").change(function(){
+		$("#country").show();
+		//执行后面函数之前清空一下
+		$("#city").html('<option value="城市/地区">城市/地区</option>');
+		$("#country").html('<option value="区/县">区/县</option>');
+		$.each(allCity,function(i,n){
+			if($("#province").val()==n.p){
+				$.each(n.c,function(a,b){
+					//添加每一个市
+					$("#city").append('<option value="'+ b.n + '">' + b.n + '</option>');
+				});
+			}
+		});
+	});
+
+
+	$("#city").change(function(){
+		//执行后面函数之前清空一下
+		$("#country").html('<option value="区/县">区/县</option>');
+		$.each(allCity,function(i,n){
+			if($("#province").val()==n.p){
+				$.each(n.c,function(a,b){
+					if($("#city").val()==b.n){
+						if(b.a){//判断有没有县，有就显示，没有就隐藏
+							$.each(b.a,function(c,d){
+								//添加每一个县
+								$("#country").append('<option value="'+ d.s + '">' + d.s + '</option>');
+							})
+						}else{
+							$("#country").hide();
+						}
+					}
+				});
+			}
+		});
+	});
+</script>
+</body>
+</html>

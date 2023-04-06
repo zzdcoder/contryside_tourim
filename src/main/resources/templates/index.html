@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"   >
+<head>
+    <title>首页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+  	<script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+    <!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <script  src="../static/js/vue.js"></script>
+</head>
+<body>
+<!-------------------工具栏------------------->
+<div id="toolbar">
+    <div class="cw1200">
+        <ul class="fl">
+            <li class="tb"><p th:text="'您好'+${session.username}+'，欢迎访问'"></p></li>
+            <li class="tb" v-if="show"><a th:href="@{/gotologin}">登录</a><span>|</span></li>
+            <li class="tb" v-if="show"><a th:href="@{/gotoregister}">注册</a></li>
+        </ul>
+        <!-------------------签到弹出层------------------->
+        <div id="sign_layer">
+            <div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+                <div class="am-modal-dialog">
+                    <div class="win-m">
+                        <p class="p1">签到成功</p>
+                        <p class="p1">获得<span class="already-sign">20</span>积分</p>
+                        <p class="p2">每天签到都可以获得积分哦</p>
+                        <div class="am-modal-footer">
+                            <span class="am-modal-btn">知道了</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <ul class="fr">
+            <li class="tb">
+                <a href="#" th:text="${session.username}"></a>
+                <!-------------------用户------------------->
+                <div class="user">
+                    <a class="user-hd" href="#">
+                        <img th:src="${session.userheader}"/><b></b>
+                        <div class="clear"></div>
+                    </a>
+                    <div class="user-bd">
+                        <div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+                        <ul class="nav_sort">
+                            <li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+                            <li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+                            <li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+                            <li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+                            <li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+                            <li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+                            <li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+                            <li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+                            <li><a href="/quit_log"><i class="i8"></i>退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <span>|</span>
+            </li>
+            <li class="tb"><a th:href="@{/goto_cart}"><i class="cart_ico"></i>购物车</a><span>|</span></li>
+            <li class="tb"><a href="news_list.html">用户帮助中心</a><span>|</span></li>
+            <li class="tb"><img src="../static/images/tel_ico.gif"/><font>40000-40000</font></li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-------------------版头------------------->
+<div id="header">
+    <div class="cw1200">
+        <!-------------------logo------------------->
+        <div class="logo fl"><a title="" href="index.html"><img alt="" src="../static/images/logo.png" style="width: 260px;height: 95px;border-color: white;margin-left: 30px"></a></div>
+        <div class="search_nav fl">
+            <!-------------------搜索------------------->
+            <div class="search radius6">
+				<form name="searchform" method="post" action="/e/search/index.php">
+					<input name='ecmsfrom' type='hidden' value='9'>
+					<input type="hidden" name="show" value="title,newstext">
+					<select name="classid" id="choose">
+						<option value="0">景区</option>
+						<option value="1">特产</option>
+						<option value="4">游记</option>
+						<option value="22">文章</option>
+					</select> 
+					<input class="inp_srh" name="keyboard"  placeholder="请输入您要搜索的关键词" >
+					<input class="btn_srh" type="submit" name="submit" value="搜索">
+				</form>
+			</div>
+			<script type="text/javascript" src="../static/js/jquery.select.js"></script>
+            <!-------------------导航------------------->
+            <div class="nav">
+                <ul>
+                <li><a title="" class="cur" th:href="@{/}">首页</a></li>
+                <li><a class="tta" title="" th:href="@{/tourim(pagenum=1)}">遵义旅游</a></li>
+                <li><a title="" th:href="@{/foodshop(pagenum=1)}">特产商城</a></li>
+                <li><a title="" th:href="@{/contryside(pagenum=1)}">乡村体验</a></li>
+                <li><a title="" th:href="@{/news}">新闻资讯</a></li>
+               </ul>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!------------------banner-------------------->
+<script src="../static/js/jquery.superslide.2.1.1.js" type="text/javascript"></script>
+<div class="h_banner">
+	<ul class="h_b_list">
+		<li><a style="background:url(../static/images/banner1.jpg) no-repeat center;" href="#"></a></li>
+		<li><a style="background:url(../static/images/banner2.png) no-repeat center;" href="#"></a></li>
+		<li><a style="background:url(../static/images/banner3.jpg) no-repeat center;" href="#"></a></li>
+		<li><a style="background:url(../static/images/banner4.png) no-repeat center;" href="#"></a></li>
+	</ul>
+	<a class="prev" href="javascript:void(0)"></a>
+	<a class="next" href="javascript:void(0)"></a>
+</div>
+<script>
+/*鼠标移过，左右按钮显示*/
+$(".h_banner").hover(function(){
+	$(this).find(".prev,.next").fadeTo("show",0.5);
+},function(){
+	$(this).find(".prev,.next").hide();
+})
+/*鼠标移过某个按钮 高亮显示*/
+$(".prev,.next").hover(function(){
+	$(this).fadeTo("show",1);
+},function(){
+	$(this).fadeTo("show",0.7);
+})
+$(".h_banner").slide({ titCell:".num ul" , mainCell:".h_b_list" , effect:"fold", autoPlay:true, delayTime:700 , autoPage:true });
+</script>
+
+<!------------------广告-------------------->
+<div class="h_gg">
+    <a title="" href="#"><img alt="" src="../static/images/zunyifood/foodq.jpg" height="100 px" width="258px"/></a>
+    <a title="" href="#"><img alt="" src="../static/images/zunyiacti/a1.jpg" height="100 px" width="258px"/></a>
+    <a title="" href="#"><img alt="" src="../static/images/zunyiacti/a2.jpg" height="100 px" width="258px"/></a>
+    <a title="" href="#"><img alt="" src="../static/images/zunyiacti/a4.jpg" height="100 px" width="258px"/></a>
+</div>
+<!------------------精彩活动-------------------->
+<div class="h_bg1_g"></div>
+<div id="h_activity">
+    <div class="cw1200">
+        <div class="title"><img alt="" src="../static/images/h_title1.png"/></div>
+        <div class="con">
+            <div class="box">
+                <a title="" th:href="@{/activites}">
+                    <img alt="" class="scale-effect" src="../static/images/zunyiacti/a3.jpg" width="424px" height="330"/>
+                    <p>贵州遵义务川仡佬族吃新庆丰收</p>
+                    <span><i class="am-icon-clock-o"></i>2017/01/20</span>
+                </a>
+            </div>
+            <div class="video">
+                <img alt="" class="scale-effect" src="../static/images/zunyiacti/a6.jpg" width="424px" height="330"/>
+            </div>
+            <div class="box">
+                <a title=""th:href="@{/activites}">
+                    <img alt="" class="scale-effect" src="../static/images/zunyiacti/a5.jpg" width="424px" height="330"/>
+                    <p>遵义务川：仡佬族祭天朝主祭祀大典正在举行</p>
+                    <span><i class="am-icon-clock-o"></i>2017/01/20</span>
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="h_bg1_g"></div>
+<!------------------洛阳旅游-------------------->
+<div id="h_scenic">
+    <div class="cw1200">
+        <h1>热门景区</h1>
+        <div class="con">
+            <div class="tag"><img alt="" src="../static/images/h_title2_t.jpg"/></div>
+            <div class="box">
+                <ul>
+                    <li><a title="" th:href="@{/hot_tourim}"><img alt="" class="scale-effect" src="../static/images/j1.jpg"/><span>龙马负图寺</span></a></li>
+                    <li><a title="" th:href="@{/hot_tourim}"><img alt="" class="scale-effect" src="../static/images/y3.jpg"/><span>老君山风景区</span></a></li>
+                    <li><a title="" th:href="@{/hot_tourim}"><img alt="" class="scale-effect" src="../static/images/10F118AC-FE28-4986-A6D0-B9E739F8CFDC.jpg"/><span>鸡冠洞</span></a></li>
+                    <li><a title="" th:href="@{/hot_tourim}"><img alt="" class="scale-effect" src="../static/images/2c90cca2458c651b01458c95cc0b000c.jpg"/><span>千唐志斋</span></a></li>
+                    <li><a title="" th:href="@{/hot_tourim}"><img alt="" class="scale-effect" src="../static/images/DD0E49BD-47F5-4B10-85DB-FE2390B91541.jpg"/><span>龙门石窟</span></a></li>
+                    <div class="clear"></div>
+                </ul>
+                <div class="more"><a href="scenic_list.html">热门景区<span>+</span></a></div>
+                
+            </div>
+            <div class="box">
+                <ul>
+                    <li><a title="" href="scenic.html"><img alt="" class="scale-effect" src="../static/images/uu1.jpg"/><span>郁金香庄园</span></a></li>
+                    <li><a title="" href="scenic.html"><img alt="" class="scale-effect" src="../static/images/uu2.jpg"/><span>小浪底度假村</span></a></li>
+                    <li><a title="" href="scenic.html"><img alt="" class="scale-effect" src="../static/images/uu3.jpg"/><span>银滩农业观光园</span></a></li>
+                    <li><a title="" href="scenic.html"><img alt="" class="scale-effect" src="../static/images/uu4.jpg"/><span>《琦梦红提园》采摘</span></a></li>
+                    <li><a title="" href="scenic.html"><img alt="" class="scale-effect" src="../static/images/uu5.jpg"/><span>夜游丽景门</span></a></li>
+                    <div class="clear"></div>
+                </ul>
+                <div class="more"><a title="" href="scenic_list.html">休闲度假<span>+</span></a></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<!------------------洛阳美食-------------------->
+<div id="h_food">
+    <div class="cw1200">
+        <h1 >遵义美食</h1>
+        <div class="con">
+            <div class="box fl">
+                <div class="big">
+                    <div class="pic"><a title="" href="#"><img alt="" class="scale-effect" src="../static/images/f0.jpg"/></a></div>
+                    <p>所谓“水席”，有二层含义：一是以汤水见长，二是吃一道换一道，一道道上菜，象流水一般，故名“水席”。洛阳水席最初只是在民间流行，唐代武则天时，将洛...</p>
+                </div>
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f1.jpg"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f2.png"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f3.jpg"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
+                    <div class="more"><a title="" href="#">查看更多</a></div>
+                </div>
+            </div>
+            <div class="box fr">
+                <div class="big">
+                    <div class="pic"><a href="#"><img alt="" class="scale-effect" src="../static/images/f00.jpg"/></a></div>
+                    <p>所谓“水席”，有二层含义：一是以汤水见长，二是吃一道换一道，一道道上菜，象流水一般，故名“水席”。洛阳水席最初只是在民间流行，唐代武则天时，将洛...</p>
+                </div>
+                <div class="list">
+                    <ul>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f1.jpg"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f2.png"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a title="" href="#">
+                                <div class="pic"><img alt="" class="scale-effect" src="../static/images/f3.jpg"/></div>
+                                <p>宴天下大酒店老城店</p>
+                            </a>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
+                    <div class="more"><a title="" href="#">查看更多</a></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<!------------------洛阳特产-------------------->
+<div id="h_project">
+    <div class="cw1200">
+        <h1>遵义特产</h1>
+        <div class="con">
+            <ul>
+                <li>
+                    <a title="" href="#">
+                        <img alt="" class="scale-effect" src="../static/images/t1.jpg"/>
+                        <p>新米 有机杂粮小米黄小米2000g 粮食五谷 农家包邮</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="#">
+                        <img class="scale-effect" src="../static/images/t2.jpg"/>
+                        <p>《孟津贡梨主题公园》孟津酥梨</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="#">
+                        <img alt="" class="scale-effect" src="../static/images/t3.jpg"/>
+                        <p>《幸福农场》孟津葡萄</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="#">
+                        <img alt="" class="scale-effect" src="../static/images/t4.jpg"/>
+                        <p>有机药用黑豆</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="#">
+                        <img alt="" class="scale-effect" src="../static/images/t5.jpg"/>
+                        <p>大麦茶</p>
+                    </a>
+                </li>       
+            </ul>
+        </div>
+    </div>
+</div>  
+<!------------------美丽乡村-------------------->
+<div id="h_note">
+    <div class="cw1200">
+        <h1>美丽遵义</h1>
+        <div class="con">
+            <ul>
+                <li>
+                    <div class="box">
+                        <div class="pic">
+                            <a title="" href="#"><img alt="" class="scale-effect" src="../static/images/nt_1.jpg"/></a>
+                        </div>
+                        <div class="user">
+                            <div class="head"><img alt="" src="../static/images/head1.jpg"/></div>
+                            <p>A monologue. 独白。</p>
+                            <span><label><img alt="" src="../static/images/state_icon1.png"/>18</label><label><img src="../static/images/state_icon2.png"/>20</label></span>
+                        </div>
+                        <div class="cont">
+                            <a title="" href="#"><h3>遵义，历史长河中的一处停歇</h3></a>
+                            <p>习惯并且爱上了走在路上的感觉不是想去探寻什么只是心中泛滥的小情怀在走</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <div class="pic">
+                            <a title="" href="#"><img alt="" class="scale-effect" src="../static/images/nt_2.jpg"/></a>
+                        </div>
+                        <div class="user">
+                            <div class="head"><img alt="" src="../static/images/hh2.jpg"/></div>
+                            <p>卖萌の小喵咪</p>
+                            <span><label><img alt="" src="../static/images/state_icon1.png"/>18</label><label><img src="../static/images/state_icon2.png"/>20</label></span>
+                        </div>
+                        <div class="cont">
+                            <a title="" href="#"><h3>遵义，历史长河中的一处停歇</h3></a>
+                            <p>习惯并且爱上了走在路上的感觉不是想去探寻什么只是心中泛滥的小情怀在走</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <div class="pic">
+                            <a title="" href="#"><img alt="" class="scale-effect" src="../static/images/nt_3.jpg"/></a>
+                        </div>
+                        <div class="user">
+                            <div class="head"><img src="../static/images/hh3.jpg"/></div>
+                            <p>独闯世界fell</p>
+                            <span><label><img alt="" src="../static/images/state_icon1.png"/>18</label><label><img src="../static/images/state_icon2.png"/>20</label></span>
+                        </div>
+                        <div class="cont">
+                            <a title="" href="#"><h3>遵义，历史长河中的一处停歇</h3></a>
+                            <p>习惯并且爱上了走在路上的感觉不是想去探寻什么只是心中泛滥的小情怀在走</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <div class="pic">
+                            <a title="" href="#"><img class="scale-effect" src="../static/images/nt0.jpg"/></a>
+                        </div>
+                        <div class="user">
+                            <div class="head"><img src="../static/images/hh4.jpg"/></div>
+                            <p>大叔god说走就走</p>
+                            <span><label><img alt="" src="../static/images/state_icon1.png"/>18</label><label><img src="../static/images/state_icon2.png"/>20</label></span>
+                        </div>
+                        <div class="cont">
+                            <a title="" href="#"><h3>遵义，历史长河中的一处停歇</h3></a>
+                            <p>习惯并且爱上了走在路上的感觉不是想去探寻什么只是心中泛滥的小情怀在走</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+</div>
+<!------------------首页新闻-------------------->
+<div id="h_news">
+    <div class="cw1200">
+        <div class="activity_news fl">
+            <div class="title"><img alt="" src="../static/images/h_title6.png"/></div>
+            <div class="con">
+                <ul>
+                    <li><a title="" href="article.html"><img class="scale-effect" src="../static/images/n1.jpg"/><p>春节逛吃哪里去？看洛阳庙会、灯展集锦</p></a></li>
+                    <li><a title="" href="article.html"><img class="scale-effect" src="../static/images/n2.jpg"/><p>春节洛阳九县六区超嗨的节目单出炉</p></a></li>
+                    <li><a title="" href="article.html"><img class="scale-effect" src="../static/images/n3.jpg"/><p>栾川各景区“冬游季”活动大比拼</p></a></li>
+                    <li><a title="" href="article.html"><img class="scale-effect" src="../static/images/n4.jpg"/><p>美！滑雪看戏吃鱼宴，今年过年来嵩县！</p></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="hot_news fr">
+            <div class="title"><img src="../static/images/h_title7.png"/></div>
+            <div class="con">
+     
+                <div data-am-widget="slider" class="pic am-slider am-slider-c4" data-am-slider='{"controlNav":false}'>
+                    <ul class="am-slides">
+                        <li>
+                            <a href="article.html">
+								<img alt="" src="../static/images/n5.jpg"/>
+								<div class="am-slider-desc">春节黄金周，洛阳旅游全线飘红</div>
+							</a>
+                        </li>
+                        <li>
+                            <a href="article.html">
+								<img alt="" src="../static/images/n5.jpg"/>
+								<div class="am-slider-desc">春节黄金周，洛阳旅游全线飘红</div>
+							</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="list">
+                    <ul>
+                        <li><a title="" href="article.html">正月十五，这些习俗要了解02/09</a><span>01/18</span></li>
+                        <li><a title="" href="article.html">正月十五，这些习俗要了解02/09</a><span>01/18</span></li>
+                        <li><a title="" href="article.html">正月十五，这些习俗要了解02/09</a><span>01/18</span></li>
+                        <li><a title="" href="article.html">正月十五，这些习俗要了解02/09</a><span>01/18</span></li>
+                        <li><a title="" href="article.html">正月十五，这些习俗要了解02/09</a><span>01/18</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-----------------版底---------------->
+<div id="footer">
+    <div class="cw1200">
+        <div class="con">
+            <p>Zhiqi文化旅游发展有限公司 版权所有</p>
+            <p>地址：河南省洛阳市Zhiqi文化游客接待中心　邮编：000000　电话：0000-00000000　业务电话：0000-00000000</p>
+            <p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：zhiqi</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script >
+   var vue =new Vue({
+        el:"#toolbar",
+        data:{
+            show:true,
+            username:"",
+        },
+        created(){
+            this.juged()
+        },
+        methods:{
+            juged(){
+                let user = sessionStorage.getItem("username");
+                console.log(user)
+                if (user==null){
+                    this.show=true
+                }
+                else {
+                    //将json对象转换为js对象
+                    this.username=JSON.parse(user)
+                    this.show=false
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

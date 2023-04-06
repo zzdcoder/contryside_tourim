@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mapper.FangwuimgMapper">
+
+    <resultMap id="BaseResultMap" type="tourim.contryside.pojo.Fangwuimg">
+            <id property="imgId" column="img_id" jdbcType="INTEGER"/>
+            <result property="fangwuId" column="fangwu_id" jdbcType="INTEGER"/>
+            <result property="imgPath" column="img_path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        img_id,fangwu_id,img_path
+    </sql>
+</mapper>

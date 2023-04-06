@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <title>确认订单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+  	<script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+	<!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+	<script type="text/javascript" src="../static/js/vue.js"></script>
+	<script type="text/javascript" src="../static/js/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <link rel="stylesheet" type="text/css" href="../static/css/user.css">
+</head>
+<body>
+
+<!-------------------版头------------------->
+<div id="header">
+    <div class="cw1000">
+        <!-------------------logo------------------->
+		<!-------------------头部导航------------------->
+		<div class="head_title">
+			确认订单
+		</div>
+		<!-------------------用户------------------->
+		<div class="user">
+			<a class="user-hd" href="#">
+				<img th:src="${session.userheader}"/><span style="position: relative;top: 10px"  th:text="${session.username}"></span>
+				<div class="clear"></div>
+			</a>
+			<div class="user-bd">
+				<div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+				<ul class="nav_sort">
+					<li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+					<li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+					<li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+					<li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+					<li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+					<li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+					<li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+					<li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+					<li><a href="#"><i class="i8"></i>退出</a></li>
+				</ul>
+			</div>
+		</div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<!-----------------确认订单---------------->
+<div id="confirm_order">
+	<div class="cw1000">	
+
+		<!-----------------收货人信息---------------->
+		<div class="addr_list">
+			<h2>收货人信息</h2>
+			<ul >
+				<li th:each="address,it:${addressList}"  @click="tooglecur"  :class="{cur:isactive} ">
+					<h1 th:text="${address.gotName}">袁旭<span th:text="${address.phoneNum}">158****4932</span></h1>
+					<p th:id="${it.index+1}" th:text="${address.addre}">中国 河南 洛阳市 洛龙区 太康东路街道****园1号楼907室</p>
+				</li>
+				<div class="clear"></div>
+			</ul>
+			<div class="add"><a th:href="@{/add_address(spName=${spName},orderTime=${orderTime},spPicture=${spPicture},price=${price},spNum=${spNum},totalPrice=${totalPrice})}">收货人添加与管理</a></div>
+		</div>
+		<!-----------------送货清单---------------->
+		<div class="list_box">
+			<h2>送货清单</h2>
+			<table>
+				<tr>
+					<th>商品名称</th>
+					<th>单价</th>
+					<th>数量</th>
+					<th>小计</th>
+				</tr>
+				<tr>
+					<td>
+						<div class="pic"><a href="#"><img width=53 height=53 th:src="${spPicture}" /></a></div>
+						<div class="name">
+							<a id="sp_name" href="#" th:text="${spName}">孟津特供香酥梨一斤</a>
+							<p id="order_time" th:text="'下单日期：'+${orderTime}">2017-03-06</p>
+						</div>
+						<div class="clear"></div>
+					</td>
+					<td th:text="'￥'+${price}" style="text-align:center;" >￥50.0</td>
+					<td id="sp_num" th:text="${spNum}" style="text-align:center;">x2</td>
+					<td  th:text="'￥'+${totalPrice}" style="text-align:center;">￥100.0</td>
+				</tr>
+			</table>
+		
+		</div>
+		<div class="pay_method">
+			<h2>支付方式</h2>
+			<ul>
+				<li><a class="cur" href="#">支付宝支付</a><span>← 选择支付宝支付商品金额</span></li>
+				<li><a href="#">微信支付</a><span>← 选择微信钱包支付商品金额</span></li>
+			</ul>
+		</div>
+		<div class="calculation">
+		
+			<input type="submit" @click="ensureorder"  value="结算" />
+			<span>应付金额（含运费0.00元）： <b id="total_price" th:text="'￥'+${totalPrice}">￥200.0</b></span>
+			
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-----------------版底---------------->
+<div id="footer">
+	<p>遵义文化旅游发展有限公司 版权所有</p>
+	<p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：周遵大</p>
+</div>
+<script type="text/javascript">
+	new Vue({
+		el:"#confirm_order",
+		data:{
+			isactive:false,
+		},
+		methods:{
+			tooglecur(){
+				this.isactive=!this.isactive
+			},
+			ensureorder(){
+				if (confirm("确认结算订单？？")){
+					var addre = $("#1").html();
+					var total_price = $("#total_price").html();
+					var total = total_price.substring(1,total_price.length);
+					var sp_num = $("#sp_num").html();
+					var order_time = $("#order_time").html().split("：");
+					var sp_name = $("#sp_name").html();
+					document.write("<form action=/save_goodsorder method=post name=form style='display: none'>");
+					document.write("<input type='hidden' name='addre' value='"+addre+"'>")
+					document.write("<input type='hidden' name='total_price' value='"+total+"'>")
+					document.write("<input type='hidden' name='sp_num' value='"+sp_num+"'>")
+					document.write("<input type='hidden' name='order_time' value='"+order_time+"'>")
+					document.write("<input type='hidden' name='sp_name' value='"+sp_name+"'>")
+					document.form.submit()
+				}
+			}
+		}
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <title>商品订单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-------------jquery库-------------->
+  	<script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+	<!-------------Amazeui--------------->
+    <script type="text/javascript" src="../static/js/amazeui.js"></script>
+    <script type="text/javascript" src="../static/js/vue.js"></script>
+    <script type="text/javascript" src="../static/js/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/amazeui.css">
+    <!------------核心样式-------------->
+    <link rel="stylesheet" type="text/css" href="../static/css/user.css">
+</head>
+<body>
+
+<!-------------------版头------------------->
+<div id="header">
+    <div class="cw1000">
+        <!-------------------logo------------------->
+		<!-------------------头部导航------------------->
+		<div class="head_title">
+			购物车
+		</div>
+		<!-------------------用户------------------->
+		<div class="user">
+			<a class="user-hd" href="#">
+				<img th:src="${session.userheader}"/><span style="position: relative;top: 10px"  th:text="${session.username}"></span>
+				<div class="clear"></div>
+			</a>
+			<div class="user-bd">
+				<div class="integral"><img src="../static/images/integral_ico.png"/>当前积分 609</div>
+				<ul class="nav_sort">
+					<li><a href="my_index.html"><i class="i1"></i>我的主页</a></li>
+					<li><a href="write_note.html"><i class="i2"></i>写游记</a></li>
+					<li><a href="my_note.html"><i class="i9"></i>我的游记</a></li>
+					<li><a href="collection_list.html"><i class="i3"></i>我的收藏</a></li>
+					<li><a href="project_order.html"><i class="i4"></i>商品订单</a></li>
+					<li><a href="scenic_order.html"><i class="i5"></i>旅游订单</a></li>
+					<li><a href="note_comments.html"><i class="i6"></i>我的评论</a></li>
+					<li><a href="my_info.html"><i class="i7"></i>设置</a></li>
+					<li><a href="#"><i class="i8"></i>退出</a></li>
+				</ul>
+			</div>
+		</div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<!-----------------框架---------------->
+<div id="shop_car">
+	<div class="cw1000">	
+
+		<div class="main_title">
+			<ul>
+				<li style="width:35%;">
+					<label class="am-checkbox">
+						<input type="checkbox" id="checkbox_a1" class="chk_1"> 
+						<label for="checkbox_a1" style="margin-right:10px;"></label> 全选
+					</label>
+					商品信息
+				</li>
+				<li style="width:15%;">单价</li>
+				<li style="width:20%;">数量</li>
+				<li style="width:15%;">总价</li>
+				<li style="width:15%;">操作</li>
+			</ul>
+		</div>
+		<div class="list_box">
+			<ul >
+				<li th:each="car:${cart_list}">
+					<div class="con">
+						<div class="info" style="width:35%;">
+							<label class="am-checkbox" style="float:left;margin-right:15px;">
+								<input type="checkbox" id="checkbox_a5" class="chk_1"> 
+								<label for="checkbox_a5"></label>
+							</label>
+							<div class="pic"><a href="#"><img id="picture" width=53 height=53 th:src="${car.spPicture}" /></a></div>
+							<div class="name">
+								<p id="gname" th:text="${car.spName}"></p>
+								<p id="ordert" th:text="'下单日期：'+${car.orderTime}"></p>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="price" style="width:15%;" ><label id="spPrice" th:text="'￥'+${car.spPrice}"></label></div>
+						<div class="number" style="width:20%;">
+							<div class="Spinner">
+								<a class="DisDe" @click="reduce" href="javascript:void(0)"><i>-</i></a>
+								<input class="Amount" id="num" th:value="${car.spNum}" autocomplete="off" maxlength="3">
+								<a class="Increase" @click="add" href="javascript:void(0)"><i>+</i></a>
+							</div>
+						</div>
+						
+						<div class="price" style="width:15%;"><span id="totalprice" th:text="'￥'+${car.totalPrice}"></span></div>
+						
+						<div class="operation" style="width:15%;">
+							<a class="evaluation" @click="ensureDelete" th:href="@{/delete_one(spName=${car.spName})}">删除</a>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="calculation">
+			<label class="am-checkbox" style="float:left;padding-left:30px;margin-top:15px;">
+				<input type="checkbox" id="checkbox_a0" class="chk_1"> 
+				<label style="margin-right:10px;" for="checkbox_a0"></label> 全选
+			</label>
+			<a href="#" @click="gotoOrder">提交订单</a>
+			<span>合计（含运费0.00元）： <b >￥{{totalprice}}</b></span>
+			
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-----------------版底---------------->
+<div id="footer">
+	<p>遵义文化旅游发展有限公司 版权所有</p>
+	<p>Copyright 2019 zhiqi All Rights Reserved | 豫ICP备00000000号　技术支持：周遵大</p>
+</div>
+<script type="text/javascript">
+	new Vue({
+		el:"#shop_car",
+		data:{
+			totalprice:0,
+			num:1,
+			price:0,
+			spname:"",
+			spPicture:"",
+			ordertime:"",
+		},
+		methods:{
+			gotoOrder(){
+				document.write("<form action=/gotoOrder method=post name=form style='display: none'>");
+				document.write("<input type=hidden name=spName value='"+this.spname+"'>");
+				document.write("<input type=hidden name=spPicture value='"+this.spPicture+"'>");
+				document.write("<input type=hidden name=price value='"+this.price+"'>");
+				document.write("<input type=hidden name=totalPrice value='"+this.totalprice+"'>");
+				document.write("<input type=hidden name=spNum value='"+this.num+"'>");
+				document.write("<input type=hidden name=orderTime value='"+this.ordertime+"'>");
+				document.write("</form>")
+				document.form.submit()
+			},
+			add(){
+				this.num++
+			},
+			reduce(){
+				if(this.num>1){
+					this.num--
+				}
+			},
+			ensureDelete(){
+				if (confirm("确定删除当前订单？")){
+					window.location.href="/delete_one?spName='"+this.spName+"'"
+				}else {
+                    window.location.href="redirect:/goto_cart"
+				}
+			},
+			getelement(){
+				var total = $("#totalprice").html();
+				var ordert = document.getElementById("ordert").innerHTML;
+				var strings = ordert.split("：");
+				console.log(strings);
+				var ordert2 = strings[1];
+				this.ordertime=ordert2
+				var name = $("#gname").html();
+				 this.spname=name
+				var pic = document.getElementById("picture")
+				var amount = $("#num").val();
+				this.num=parseInt(amount)
+				var src1 = pic.src;
+				this.spPicture=src1
+				var totalsprice = total.substring(1,total.length);
+				this.totalprice=parseFloat(totalsprice)
+				var spPrice = $("#spPrice").html();
+				var price = spPrice.substring(1,spPrice.length);
+				this.price=parseInt(price)
+			}
+		},
+		created(){
+			this.getelement()
+		},
+		computed:{
+			computTotal(){
+				var total = this.num * this.price;
+				this.totalprice=total
+				return total
+			}
+		}
+	})
+</script>
+</body>
+</html>

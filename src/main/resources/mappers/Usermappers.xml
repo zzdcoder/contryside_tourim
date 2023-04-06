@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.Usermappers">
+    <select id="getOneUserByPhone" resultType="string">
+        select password from user where user_telephone=#{phone}
+    </select>
+    <select id="getUserByPhone" resultType="tourim.contryside.pojo.UserEntity">
+       select * from user where user_telephone=#{phone}
+    </select>
+    <select id="getUserByname" resultType="tourim.contryside.pojo.UserEntity">
+        select * from user where user_name=#{name}
+    </select>
+    <select id="getorderpay" resultType="tourim.contryside.vo.JingDian_order_pay">
+        select u.*,j.*,dj.* from user u ,jingdian j ,dingdan_jingdian dj where u.user_id=dj.user_id and j.jd_id=dj.jd_id and dj.jd_id=#{id}
+    </select>
+</mapper>

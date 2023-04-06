@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.Shangpinmappers">
+    <update id="updateGoodsByname">
+        update shangpin set reposi_num=reposi_num-#{num} where sp_name=#{name}
+    </update>
+
+    <select id="getAllgoods" resultType="tourim.contryside.pojo.ShangpinEntity">
+        select * from shangpin
+    </select>
+    <select id="getshangpingbyname" resultType="tourim.contryside.pojo.ShangpinEntity">
+        select * from shangpin where sp_name=#{name}
+    </select>
+</mapper>

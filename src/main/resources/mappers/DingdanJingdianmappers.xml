@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourim.contryside.mappers.DingdanJingdianmappers">
+
+    <update id="updateduplicateorder">
+        update dingdan_jingdian set jd_num=#{jdNum},cont_name=#{contacName},cont_phone=#{contactPhone},total_price=#{totalPrice} where jd_id=#{jdId}
+    </update>
+    <resultMap id="mappingDingdanJingdian" type="tourim.contryside.pojo.DingdanJingdianEntity">
+        <id column="df_id" property="dfId"></id>
+        <result column="cont_phone" property="contactPhone"></result>
+        <result column="cont_name" property="contacName"></result>
+    </resultMap>
+    <select id="getDingdanJingdianByJdid" resultMap="mappingDingdanJingdian">
+        select * from dingdan_jingdian where jd_id=#{jdid}
+    </select>
+</mapper>
